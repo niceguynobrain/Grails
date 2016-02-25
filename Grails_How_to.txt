@@ -7,7 +7,12 @@ Do not alter commands which follow 'grails' cmd-line instruction.
 
 For more detailed notes see: grails/hello-world
 
-For further clarification see: http://grails.github.io/grails-doc/latest/guide/
+For further clarification see: 
+
+http://grails.github.io/grails-doc/latest/guide/
+
+http://grails.github.io/grails-doc/latest/ref/Command%20Line/Usage.html
+
 */
 
 // Create a Grails project
@@ -15,18 +20,44 @@ grails create-app <project_name>
 
 // Create a Domain class
 // Domain class stores persistance data.
+// Must be created from the project directory
 cd <project_name>
 grails create-domain-class org.example.ClassName
 
 	package org.example
 	class ClassName {
-	// Define persitstance data
+	// Define persistance data
+	// properties we want to persist must have an expicit type i.e. 'String'
 	    String data1
 	    String data2
-	// Define validation requirements    	
+	    Int data3 
+
+	    // Associate this class with multiple other class objects - 'hasMany'
+	    /** Tag and Tasks example:
+	    // Tag has many tasks of type Task 
+		class Tag {
+	    	static hasMany = [tasks: Task]
+	    	// Task is the owner
+	    	static belongsTo = com.andrewparkerdev.Task 
+	    }
+	    // Task has many tags of type Tag
+	    class Task {
+			static hasMany = [tags: Tag]
+	    }
+	    */
+	    static hasMany = [<collection_property>: <domain_instance_of_type>]
+	    // Every many to many relationship MUST have a beloning side
+	    static belongsTo = org.example.<domain_instance_of_type> 
+
+		// Define validation requirements    	
 	    static constraints = {
-	        data1(blank: false)
-	        data1(blank: false)
+	    	// can't be blank, must be unique
+	        data1(blank: false, unique: true)
+	        // optional property
+	        data2(nullable: true)
+	        // minimum value
+	        data3 min: 1
+
 	    }
 	}
 
@@ -38,6 +69,9 @@ grails create-controller org.example.ClassName // Note the capital C
 		// Enable scaffolding
 	    def scaffold = ClassName
 	}
+
+// Create index.gsp for each Class
+grails generate-views org.example.ClassName
 
 // Start Grails
 grails run-app
