@@ -1,0 +1,46 @@
+/** User Guide:
+Replace items such as ClassName with your actual class name, replace items 
+such as <project_name> with your actual project name, replace its such as data1
+with your actual variable name, ect. 
+
+Do not alter commands which follow 'grails' cmd-line instruction.
+
+For more detailed notes see: grails/hello-world
+
+For further clarification see: http://grails.github.io/grails-doc/latest/guide/
+*/
+
+// Create a Grails project
+grails create-app <project_name>
+
+// Create a Domain class
+// Domain class stores persistance data.
+cd <project_name>
+grails create-domain-class org.example.ClassName
+
+	package org.example
+	class ClassName {
+	// Define persitstance data
+	    String data1
+	    String data2
+	// Define validation requirements    	
+	    static constraints = {
+	        data1(blank: false)
+	        data1(blank: false)
+	    }
+	}
+
+// Create a Controller 
+grails create-controller org.example.ClassName // Note the capital C
+
+	package org.example
+	class BookController {
+		// Enable scaffolding
+	    def scaffold = ClassName
+	}
+
+// Start Grails
+grails run-app
+
+'http://localhost:8080/'
+
