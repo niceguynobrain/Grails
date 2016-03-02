@@ -10,4 +10,10 @@ class Tag {
     	name blank: false, unique: true
 
     }
+
+    // override the toString method
+    // this returns the name of the tag instead of the full path
+    String toString() { return name }
+
 }
+

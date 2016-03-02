@@ -1,3 +1,9 @@
+/**
+Using the grails framework from the command line.
+Grails comands must be run from the project folder.
+
+*/
+
 /** User Guide:
 Replace items such as ClassName with your actual class name, replace items 
 such as <project_name> with your actual project name, replace its such as data1
@@ -13,6 +19,9 @@ http://grails.github.io/grails-doc/latest/guide/
 
 http://grails.github.io/grails-doc/latest/ref/Command%20Line/Usage.html
 
+else:
+grails help
+grails <command> help
 */
 
 // Create a Grails project
@@ -26,14 +35,39 @@ grails create-domain-class org.example.ClassName
 
 	package org.example
 	class ClassName {
+		/**
+		package com.andrewparkerdev
+		class Task {
+		}
+		package com.andrewparkerdev
+		class Tag {
+		}
+		*/
+
 	// Define persistance data
 	// properties we want to persist must have an expicit type i.e. 'String'
 	    String data1
 	    String data2
 	    Int data3 
+	    /** 
+	    Class Task {
+		    String summary
+			String details
+			Date dateCreated
+			Date deadline
+			Long timeSpent = 0L
+		}
+		Class Tag {
+			String name
+		}
+		*/
 
 	    // Associate this class with multiple other class objects - 'hasMany'
-	    /** Tag and Tasks example:
+	    static hasMany = [<collection_property>: <domain_instance_of_type>]
+	    // Every many to many relationship MUST have a beloning side
+	    static belongsTo = org.example.<domain_instance_of_type> 
+	    /**
+	     Tag and Tasks example:
 	    // Tag has many tasks of type Task 
 		class Tag {
 	    	static hasMany = [tasks: Task]
@@ -45,10 +79,7 @@ grails create-domain-class org.example.ClassName
 			static hasMany = [tags: Tag]
 	    }
 	    */
-	    static hasMany = [<collection_property>: <domain_instance_of_type>]
-	    // Every many to many relationship MUST have a beloning side
-	    static belongsTo = org.example.<domain_instance_of_type> 
-
+	    
 		// Define validation requirements    	
 	    static constraints = {
 	    	// can't be blank, must be unique
@@ -57,18 +88,41 @@ grails create-domain-class org.example.ClassName
 	        data2(nullable: true)
 	        // minimum value
 	        data3 min: 1
-
 	    }
+	    /**
+	    static constraints = {
+	    	summary blank: false, unique: true
+	    	details blank: false, maxSize: 1000
+	    	deadline nullable: true // nullable default is false
+	    	timeSpent min: 0L
+	    	name blank: false, unique: true
+	    }
+	    */
+	   
+	    // override the toString method
+	    // this returns the name of the tag instead of the full path
+	    String toString() { return name }
+	   
 	}
 
 // Create a Controller 
 grails create-controller org.example.ClassName // Note the capital C
 
 	package org.example
-	class BookController {
+	class DomainClassController {
 		// Enable scaffolding
+		// Generating a basic UI for a domain class takes just one line.
 	    def scaffold = ClassName
 	}
+	/**
+	class TagController {
+		static scaffold = Tag
+	}
+	class TaskController {
+		static scaffold = Task
+	}
+	*/
+
 
 // Create index.gsp for each Class
 grails generate-views org.example.ClassName
@@ -78,3 +132,21 @@ grails run-app
 
 'http://localhost:8080/'
 
+grails help
+grails url-mappings-report
+grails stats
+grails <comand> help
+
+
+/* In the messages.properties file we can edit the messages which are returned
+to the UI,  this is where we can add our own messages.
+messages.properties contains all the internationalisation for the application*/
+<key>.<field>.<constraint> = 'Error Message'
+org.example.project.Class.constraint=Error Message
+/**
+<fullY_qualified_name_of_the_domain_class> 'com.andrewparkerdev.pomodoro.Task'
+<name_of_the_field> 'details'
+<constraint_that_was_violated> 'blank'
+<error_message> 'Task must not be blank!'
+com.andrewparkerdev.pomodoro.Task.details.blank=Task must not be blank!
+*/
