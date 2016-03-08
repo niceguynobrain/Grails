@@ -15,8 +15,7 @@ class Task {
 
     static constraints = {
     	summary blank: false, unique: true
-    	// maxSize makes the details area a textfield
-    	details blank: false, maxSize: 1000 
+    	details blank: false, maxSize: 2500
     	// nullable default is false
     	deadline nullable: true
     	timeSpent min: 0L

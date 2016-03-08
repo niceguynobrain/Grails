@@ -1,6 +1,13 @@
-/**
+/** View -> sytanx -> Groovy.
 Using the grails framework from the command line.
-Grails comands must be run from the project folder.
+Grails comands must be run from the project folder,
+for example in the PomodoroApp folder. 
+
+Starting the grails framework: 
+	Open Bash in the grails project folder
+	enter command: grails
+Navigate through files using File Explorer or command line.
+Use text editor to write classes ect. 
 
 */
 
@@ -116,6 +123,8 @@ grails create-controller org.example.ClassName // Note the capital C
 	}
 	/**
 	class TagController {
+		// because the contoller is named after the domain class, 
+		// we could also use 'scaffold = true'
 		static scaffold = Tag
 	}
 	class TaskController {
@@ -136,17 +145,64 @@ grails help
 grails url-mappings-report
 grails stats
 grails <comand> help
+grails install-templates
 
-
-/* In the messages.properties file we can edit the messages which are returned
-to the UI,  this is where we can add our own messages.
-messages.properties contains all the internationalisation for the application*/
-<key>.<field>.<constraint> = 'Error Message'
-org.example.project.Class.constraint=Error Message
-/**
-<fullY_qualified_name_of_the_domain_class> 'com.andrewparkerdev.pomodoro.Task'
-<name_of_the_field> 'details'
-<constraint_that_was_violated> 'blank'
-<error_message> 'Task must not be blank!'
-com.andrewparkerdev.pomodoro.Task.details.blank=Task must not be blank!
+/* Directory:
+class files: grails-app/domain/com/andrewparkerdev
+controllers: grails-app/controllers/com/andrewparkerdev
+index.gsp: grails-app/views
+messages: build/resources/main
+bootstrap: grails-app/init
+templates: src\main\templates\scaffolding\
 */
+
+// Automatically create data at server start-up using BootStrap
+
+// To save new data,
+// create instanciate a new instance of the domain class.
+def workTag = new Tag(
+// initialise its properties using name agruements in its constructor.
+// name is the property and work is the value we initialise it to. 
+	name: 'Work')
+//use the special method 'save'
+	.save(failOnError: true) 
+
+def homeTag = new Tag(name: "Home").save(failOnError: true) 
+
+// !!! if the domain class is in a package you have to import it !!!!
+
+// A domain class which has a collection property via hasMany gains addTo and 
+// removeFrom methods.
+task.addToTags(workTag)
+
+ // Scaffolding cont. Customisation of user interface. 
+grails install-templates
+
+// HTML / GSP pages are located at: build/resources/main/
+// To customise the scaffolding go to the user guide:
+URL = 'grails.github.io/grails-doc/latest/guide/single.html'
+
+// Lesson 2 of getting started with Grails:
+https://www.youtube.com/watch?v=qNFksvLxZNU&ebc=ANyPxKpMcPmYKzMRn55qBHoTzLYjRm9jaRQQ5Gx_Zenu0BzrXtm30plDLMutjD5xEarGe3iG1D_OuIoisH0aYvj_NV3xVJ04dg
+/**
+Recap. 
+	Up to this point we've created the application 
+		with Task and Tag domain model
+		and a scaffolding UI
+	Scaffolding is useful for:
+		getting started
+		interacting with the data while building out the "proper" UI
+		and administrative interfaces
+
+You wouldn't want to use scaffolding for the final product.
+
+*/
+// Creating a customised UI
+	// Main page:
+		// show a list of tasks and side by for filtering the list
+
+	// Add a new Page
+
+
+
+
